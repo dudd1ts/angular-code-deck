@@ -73,16 +73,20 @@ app-root {
   gap: 2rem;
 }
 
-.space-between {
-  justify-content: space-between;
+.justify-start {
+  justify-content: flex-start;
 }
 
-.align-center {
-  align-items: center;
+.justify-between {
+  justify-content: space-between;
 }
 
 .justify-center {
   justify-content: center;
+}
+
+.align-center {
+  align-items: center;
 }
 
 .full-center {
