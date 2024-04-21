@@ -1,1 +1,8 @@
-<p>home works!</p>
+<div class="column">
+  <div class="row wrap gap-1 space-between">
+    @for (product of products; track product) {
+      <app-product [product]="product"
+       (productOutput)="onProductOutput($event)"></app-product>
+    }
+  </div>
+</div>
