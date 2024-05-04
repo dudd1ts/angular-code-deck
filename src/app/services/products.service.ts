@@ -4,28 +4,30 @@ import { Injectable } from '@angular/core';
 import { PaginationParams, Products } from '../../types';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProductsService {
+  constructor(private apiService: ApiService) {}
 
-  constructor(private apiService: ApiService) { }
-
-  getProducts = (url: string, params: PaginationParams): Observable<Products> => {
+  getProducts = (
+    url: string,
+    params: PaginationParams
+  ): Observable<Products> => {
     return this.apiService.get(url, {
       params,
-      responseType: 'json'
-    })
-  }
+      responseType: 'json',
+    });
+  };
 
   addProduct = (url: string, body: any): Observable<any> => {
-    return this.apiService.post(url, body, {})
-  }
+    return this.apiService.post(url, body, {});
+  };
 
   editProduct = (url: string, body: any): Observable<any> => {
-    return this.apiService.post(url, body, {})
-  }
+    return this.apiService.post(url, body, {});
+  };
 
   deleteProduct = (url: string): Observable<any> => {
-    return this.apiService.delete(url, {})
-  }
+    return this.apiService.delete(url, {});
+  };
 }

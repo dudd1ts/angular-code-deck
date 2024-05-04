@@ -1,23 +1,74 @@
-import { Component } from '@angular/core';
-import { Products, Product } from '../../types';
+import { Component, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { type Products, type Product } from '../../types';
 import { ProductsService } from '../services/products.service';
 import { ProductComponent } from '../components/product/product.component';
-import { PaginatorModule } from 'primeng/paginator';
+import { EditPopupComponent } from '../components/edit-popup/edit-popup.component';
+import { type Paginator, PaginatorModule } from 'primeng/paginator';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [ProductComponent, PaginatorModule],
+  imports: [
+    CommonModule,
+    ProductComponent,
+    PaginatorModule,
+    EditPopupComponent,
+    ButtonModule,
+  ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
 export class HomeComponent {
   constructor(private productsService: ProductsService) {}
 
+  @ViewChild('paginator') paginator: Paginator | undefined;
+
   products: Product[] = [];
 
   totalRecords: number = 0;
   rows: number = 5;
+
+  displayEditPopup: boolean = false;
+  displayAddPopup: boolean = false;
+
+  selectedProduct: Product = {
+    id: 0,
+    name: '',
+    image: '',
+    price: '',
+    rating: 0,
+  };
+
+  toggleEditPopup(product: Product) {
+    this.selectedProduct = product;
+    this.displayEditPopup = true;
+  }
+
+  toggleDeletePopup(product: Product) {
+    if (!product.id) {
+      return;
+    }
+
+    this.deleteProduct(product.id);
+  }
+
+  toggleAddPopup() {
+    this.displayAddPopup = true;
+  }
+
+  onConfirmEdit(product: Product) {
+    if (!this.selectedProduct.id) return;
+
+    this.editProduct(product, this.selectedProduct.id);
+    this.displayEditPopup = false;
+  }
+
+  onConfirmAdd(product: Product) {
+    this.addProduct(product);
+    this.displayEditPopup = false;
+  }
 
   onProductOutput(product: Product) {
     console.log(product);
@@ -25,6 +76,10 @@ export class HomeComponent {
 
   onPageChange(event: any) {
     this.fetchProducts(event.page, event.rows);
+  }
+
+  resetPaginator() {
+    this.paginator?.changePage(0);
   }
 
   fetchProducts(page: number, perPage: number) {
@@ -47,6 +102,7 @@ export class HomeComponent {
       .subscribe({
         next: (data) => {
           console.log(data);
+          this.resetPaginator();
         },
         error: (error) => {
           console.log(error);
@@ -61,6 +117,7 @@ export class HomeComponent {
         next: (data) => {
           console.log(data);
           this.fetchProducts(0, this.rows);
+          this.resetPaginator();
         },
         error: (error) => {
           console.log(error);
@@ -75,13 +132,13 @@ export class HomeComponent {
         next: (data) => {
           console.log(data);
           this.fetchProducts(0, this.rows);
+          this.resetPaginator();
         },
         error: (error) => {
           console.log(error);
         },
       });
   }
-
 
   ngOnInit() {
     this.fetchProducts(0, this.rows);
