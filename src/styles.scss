@@ -1,5 +1,5 @@
-@import './styles/variables.scss';
-@import './styles/theme-overrides.scss';
+@import "./styles/variables.scss";
+@import "./styles/theme-overrides.scss";
 @import "primeng/resources/themes/md-light-indigo/theme.css";
 @import "primeng/resources/primeng.css";
 
@@ -97,4 +97,9 @@ app-root {
 
 .display-n {
   display: none;
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.5;
 }
